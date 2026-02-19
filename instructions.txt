@@ -1,0 +1,67 @@
+Je veux concevoir un projet d’observabilité réseau spécialisé pour un pipeline distribué inspiré du contexte télécom. 
+Ton rôle : agir comme un architecte réseau + ingénieur SRE senior.
+
+Objectif du projet :
+Créer un système capable d’observer, mesurer et auditer les flux réseau d’un pipeline (Kafka → service interne → API externe), avec stockage des logs dans Ceph/MinIO et exposition d’un dashboard temps réel via WebSockets.
+
+Ta mission :
+1. Proposer une architecture complète et modulaire du système, incluant :
+   - un Network Probe (Rust) pour intercepter et mesurer les flux réseau
+   - un Metrics Engine pour calculer latence p50/p95/p99, débit, taux d’erreur, saturation du pool de connexions
+   - un module de résilience réseau (timeouts, retries, backoff, circuit breaker, backpressure)
+   - un Audit Logger écrivant dans Ceph/MinIO
+   - une API REST (Axum) pour exposer les métriques
+   - un Dashboard WebSocket pour le temps réel
+
+2. Définir les invariants réseau critiques :
+   - idempotence des requêtes
+   - gestion correcte des timeouts
+   - cohérence des métriques
+   - traçabilité complète (audit)
+   - isolation entre IP interne/externe (simulation NAT)
+
+3. Décrire les flux réseau détaillés :
+   - ingestion Kafka → normalisation → envoi vers API externe
+   - interception et mesure des requêtes sortantes
+   - propagation des erreurs et gestion du backpressure
+   - écriture des logs dans Ceph
+
+4. Proposer une structure de code idiomatique Rust/Axum :
+   - modules
+   - services
+   - extractors
+   - middlewares Tower
+   - gestion du state global
+   - organisation du code pour la testabilité
+
+5. Décrire les métriques réseau à collecter :
+   - latence (p50/p95/p99)
+   - taux d’erreur
+   - saturation du pool
+   - retries
+   - timeouts
+   - état du circuit breaker
+   - débit (req/s)
+
+6. Décrire les formats de logs et traces :
+   - logs structurés JSON
+   - traces réseau
+   - payloads envoyés/reçus
+   - erreurs
+   - métadonnées (trace_id, route, IP interne/externe)
+
+7. Proposer un plan d’implémentation progressif :
+   - étape 1 : Network Probe
+   - étape 2 : Metrics Engine
+   - étape 3 : API REST
+   - étape 4 : Dashboard WebSocket
+   - étape 5 : intégration Ceph
+   - étape 6 : tests de charge et validation réseau
+
+Contraintes :
+- Code clair, commenté, robuste.
+- Pas de redondances.
+- Respect strict des invariants réseau.
+- Approche professionnelle, comme dans un contexte télécom/SRE réel.
+
+Commence par proposer l’architecture globale et les modules principaux.
