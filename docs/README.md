@@ -9,6 +9,7 @@ Ce dossier formalise la méthode de conception du MVP d’observabilité réseau
 3. [03-modelisation-donnees.md](03-modelisation-donnees.md) — modélisation relationnelle/logique des métriques, traces, audits
 4. [04-plan-validation.md](04-plan-validation.md) — stratégie de validation, charge, critères d’acceptation, gouvernance
 5. [05-backlog-implementation.md](05-backlog-implementation.md) — backlog d’implémentation S1→S6, user stories, DoD, risques/mitigations
+6. [06-runbook-mvp.md](06-runbook-mvp.md) — procédures d’exploitation, incidents, replay et seuils d’alerte MVP
 
 ## Positionnement
 
