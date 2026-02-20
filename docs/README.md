@@ -12,6 +12,7 @@ Ce dossier formalise la méthode de conception du MVP d’observabilité réseau
 6. [06-runbook-mvp.md](06-runbook-mvp.md) — procédures d’exploitation, incidents, replay et seuils d’alerte MVP
 7. [07-architecture-workspace-rust.md](07-architecture-workspace-rust.md) — architecture de référence des crates Rust, contrats et testabilité
 8. [adr/README.md](adr/README.md) — registre ADR des décisions d’architecture
+9. [09-api-ws-contracts.md](09-api-ws-contracts.md) — contrats REST/WS, schémas de payload et codes d’erreur
 
 ## Positionnement
 
