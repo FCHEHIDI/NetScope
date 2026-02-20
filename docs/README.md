@@ -11,8 +11,9 @@ Ce dossier formalise la méthode de conception du MVP d’observabilité réseau
 5. [05-backlog-implementation.md](05-backlog-implementation.md) — backlog d’implémentation S1→S6, user stories, DoD, risques/mitigations
 6. [06-runbook-mvp.md](06-runbook-mvp.md) — procédures d’exploitation, incidents, replay et seuils d’alerte MVP
 7. [07-architecture-workspace-rust.md](07-architecture-workspace-rust.md) — architecture de référence des crates Rust, contrats et testabilité
-8. [adr/README.md](adr/README.md) — registre ADR des décisions d’architecture
-9. [09-api-ws-contracts.md](09-api-ws-contracts.md) — contrats REST/WS, schémas de payload et codes d’erreur
+8. [08-observability-slo-alerting.md](08-observability-slo-alerting.md) — SLI/SLO, stratégie d’alerting et structure de dashboards
+9. [adr/README.md](adr/README.md) — registre ADR des décisions d’architecture
+10. [09-api-ws-contracts.md](09-api-ws-contracts.md) — contrats REST/WS, schémas de payload et codes d’erreur
 
 ## Positionnement
 
