@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 use async_trait::async_trait;
 
 use domain::{DomainError, OutboundGateway, OutboundResult, Outcome, RequestContext};
@@ -30,6 +32,9 @@ impl Default for StubOutboundClient {
 
 #[async_trait]
 impl OutboundGateway for StubOutboundClient {
+    /// Exécute un appel sortant simulé en mesurant la latence via horloge
+    /// monotone (`Instant`), garantissant une valeur toujours positive
+    /// indépendamment des corrections NTP (invariant I3).
     async fn execute(&self, context: &RequestContext) -> Result<OutboundResult, DomainError> {
         if context.idempotency_key.is_empty() {
             return Err(DomainError::InvalidInput(
@@ -37,9 +42,17 @@ impl OutboundGateway for StubOutboundClient {
             ));
         }
 
+        // Mesure monotone : démarre avant l'appel, calcule l'élapsé après.
+        // En implémentation réelle (reqwest), le `started_at` encadre
+        // la requête HTTP complète (connect + send + recv).
+        let started_at = Instant::now();
+
+        // Stub : simule une réponse immédiate. Remplacer par reqwest::Client.
+        let latency_ms = started_at.elapsed().as_millis() as u64;
+
         Ok(OutboundResult {
             status_code: 200,
-            latency_ms: 42,
+            latency_ms,
             bytes_sent: 256,
             bytes_received: 512,
             retry_count: 0,

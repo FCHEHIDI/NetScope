@@ -11,9 +11,9 @@ pub struct AppState {
 
 impl AppState {
     pub fn new(config: AppConfig) -> Self {
-        Self {
-            config,
-            metrics: Arc::new(InMemoryMetricsEngine::default()),
-        }
+        let metrics = Arc::new(InMemoryMetricsEngine::new(
+            config.metrics.max_latency_samples,
+        ));
+        Self { config, metrics }
     }
 }

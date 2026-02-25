@@ -6,6 +6,28 @@ pub struct ServiceConfig {
     pub bind_addr: String,
 }
 
+/// Métriques : buckets d'histogramme et taille de fenêtre glissante.
+///
+/// Les buckets **doivent être identiques** entre tous les environnements
+/// (dev, staging, prod) pour que p50/p95/p99 soient comparables et que
+/// les SLO puissent être vérifiés de façon cohérente (invariant I3).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MetricsConfig {
+    /// Bornes des buckets de latence en millisecondes.
+    pub latency_buckets_ms: Vec<f64>,
+    /// Nombre maximal d'échantillons conservés par label dans la fenêtre glissante.
+    pub max_latency_samples: usize,
+}
+
+impl Default for MetricsConfig {
+    fn default() -> Self {
+        Self {
+            latency_buckets_ms: vec![10.0, 25.0, 50.0, 100.0, 250.0, 500.0, 1000.0, 2500.0],
+            max_latency_samples: 1024,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct KafkaConfig {
     pub brokers: String,
@@ -23,6 +45,7 @@ pub struct AppConfig {
     pub service: ServiceConfig,
     pub kafka: KafkaConfig,
     pub ceph: CephConfig,
+    pub metrics: MetricsConfig,
 }
 
 #[derive(Debug, Error)]
@@ -45,6 +68,7 @@ impl Default for AppConfig {
                 endpoint: "http://127.0.0.1:7480".to_string(),
                 bucket: "netscope-audit".to_string(),
             },
+            metrics: MetricsConfig::default(),
         }
     }
 }
@@ -59,6 +83,16 @@ impl AppConfig {
         }
         if self.ceph.endpoint.is_empty() || self.ceph.bucket.is_empty() {
             return Err(ConfigError::Invalid("ceph config is incomplete".to_string()));
+        }
+        if self.metrics.latency_buckets_ms.is_empty() {
+            return Err(ConfigError::Invalid(
+                "metrics.latency_buckets_ms must not be empty".to_string(),
+            ));
+        }
+        if self.metrics.max_latency_samples == 0 {
+            return Err(ConfigError::Invalid(
+                "metrics.max_latency_samples must be > 0".to_string(),
+            ));
         }
         Ok(())
     }

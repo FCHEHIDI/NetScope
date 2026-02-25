@@ -34,8 +34,15 @@ pub struct AuditEvent {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RequestMetricPoint {
+    /// Groupe de route normalisé (ex : "orders", "payments").
     pub route_group: String,
+    /// IP interne du worker émetteur — conservée avant traduction NAT (invariant I5).
+    pub internal_ip: String,
+    /// IP externe de la destination (API Gateway ou API finale) — après NAT (invariant I5).
+    pub external_ip: String,
+    /// Classe de statut HTTP : "2xx", "4xx", "5xx".
     pub status_class: String,
+    /// Latence mesurée via horloge monotone (`Instant`) en millisecondes (invariant I3).
     pub latency_ms: u64,
     pub retry_count: u32,
     pub timeout_count: u32,
