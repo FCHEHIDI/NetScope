@@ -1,9 +1,16 @@
-use axum::http::{HeaderValue, Request};
+use tower_http::request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer};
 
-pub fn inject_request_id<B>(request: &mut Request<B>) {
-    if !request.headers().contains_key("x-request-id") {
-        request
-            .headers_mut()
-            .insert("x-request-id", HeaderValue::from_static("bootstrap-request-id"));
-    }
+/// Injecte un UUID v4 dans `x-request-id` sur chaque requête entrante
+/// qui n'en possède pas déjà un.
+///
+/// La couche s'appuie sur `tower_http::request_id::MakeRequestUuid` :
+/// aucune dépendance externe, UUID généré via `uuid::Uuid::new_v4()`.
+pub fn set_request_id_layer() -> SetRequestIdLayer<MakeRequestUuid> {
+    SetRequestIdLayer::x_request_id(MakeRequestUuid::default())
+}
+
+/// Recopie `x-request-id` de la requête vers la réponse afin que
+/// le client puisse corréler la réponse avec son identifiant.
+pub fn propagate_request_id_layer() -> PropagateRequestIdLayer {
+    PropagateRequestIdLayer::x_request_id()
 }
